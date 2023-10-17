@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using asp_net_with_angular_client_template.DataContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace asp_net_with_angular_client_template
 {
@@ -20,6 +21,8 @@ namespace asp_net_with_angular_client_template
             {
                 options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            SwaggerConfigure(services);
 
             services.AddCors();
             services.AddControllersWithViews();
@@ -64,7 +67,48 @@ namespace asp_net_with_angular_client_template
                 endpoints.MapFallbackToFile("index.html");
             });
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApp");
+            });
+
             app.UseHttpsRedirection();
         }
+
+        #region Private methods
+
+        private static void SwaggerConfigure(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApp", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                        }
+                     },
+                     Array.Empty<string>()
+                    }
+                });
+            });
+        }
+
+        #endregion
     }
 }
