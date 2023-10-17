@@ -40,6 +40,8 @@ namespace asp_net_with_angular_client_template
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Log.Information("Application starting.");
+
             app.UseCors();
             app.UseRouting();
             app.UseStaticFiles();
@@ -77,6 +79,8 @@ namespace asp_net_with_angular_client_template
             });
 
             app.UseHttpsRedirection();
+
+            Log.Information("Application started.");
         }
 
         #region Private methods
