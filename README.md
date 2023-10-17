@@ -9,7 +9,7 @@ ASP.NET with Angular client template
 - Identity service; - [In progress]
 - XML Sitemap generator - [in progress]
 
-# Frontent side
+# Frontend side
 - Angular 16.x; - [In progress]
 - Material design 16.x; - [In progress]
 - i18n Service - [In progress]
