@@ -4,7 +4,7 @@ ASP.NET with Angular client template
 # The template includes
 # Backend side
 - Connection to MySQL DB;
-- Swagger configuration; - [In progress]
+- Swagger configuration;
 - Serilog logging; - [In progress]
 - Identity service; - [In progress]
 - XML Sitemap generator - [in progress]
