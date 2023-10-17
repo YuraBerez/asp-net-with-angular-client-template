@@ -2,6 +2,7 @@
 using asp_net_with_angular_client_template.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace asp_net_with_angular_client_template
 {
@@ -23,6 +24,7 @@ namespace asp_net_with_angular_client_template
             });
 
             SwaggerConfigure(services);
+            LogConfiguration(services);
 
             services.AddCors();
             services.AddControllersWithViews();
@@ -38,6 +40,8 @@ namespace asp_net_with_angular_client_template
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Log.Information("Application starting.");
+
             app.UseCors();
             app.UseRouting();
             app.UseStaticFiles();
@@ -75,9 +79,22 @@ namespace asp_net_with_angular_client_template
             });
 
             app.UseHttpsRedirection();
+
+            Log.Information("Application started.");
         }
 
         #region Private methods
+
+        private void LogConfiguration(IServiceCollection services)
+        {
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .WriteTo.Console()
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            services.AddSingleton<Serilog.ILogger>(logger);
+        }
 
         private static void SwaggerConfigure(IServiceCollection services)
         {
