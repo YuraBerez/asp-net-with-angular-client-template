@@ -3,7 +3,7 @@ ASP.NET with Angular client template
 
 # The template includes
 # Backend side
--.NET 6
+- .NET 6
 - Connection to MySQL DB;
 - Swagger configuration;
 - Serilog logging;
@@ -11,6 +11,8 @@ ASP.NET with Angular client template
 - XML Sitemap generator - [in progress]
 
 # Frontend side
-- Angular 16.x; - [In progress]
-- Material design 16.x; - [In progress]
+- Angular 16.x;
+- Material design 16.x;
 - i18n Service - [In progress]
+- Loader interceptor;
+- Auth Interceptor - [In progress];
