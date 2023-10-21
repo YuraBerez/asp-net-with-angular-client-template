@@ -13,6 +13,6 @@ ASP.NET with Angular client template
 # Frontend side
 - Angular 16.x;
 - Material design 16.x;
-- i18n Service - [In progress]
+- i18n Service;
 - Loader interceptor;
 - Auth Interceptor - [In progress];
