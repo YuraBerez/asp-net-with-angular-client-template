@@ -96,7 +96,7 @@ namespace asp_net_with_angular_client_template
             services.AddSingleton<Serilog.ILogger>(logger);
         }
 
-        private static void SwaggerConfigure(IServiceCollection services)
+        private void SwaggerConfigure(IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
