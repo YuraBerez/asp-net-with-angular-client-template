@@ -3,6 +3,13 @@ using asp_net_with_angular_client_template.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using FluentValidation;
+using FluentValidation.Validators;
+using Microsoft.AspNetCore.Identity;
+using System.Configuration;
+using FluentValidation.AspNetCore;
+using asp_net_with_angular_client_template.Validators;
+using asp_net_with_angular_client_template.Models.Dto;
 
 namespace asp_net_with_angular_client_template
 {
@@ -15,6 +22,7 @@ namespace asp_net_with_angular_client_template
 
         public IConfiguration Configuration { get; }
 
+        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             // connection to MySql DB
@@ -28,6 +36,16 @@ namespace asp_net_with_angular_client_template
 
             services.AddCors();
             services.AddControllersWithViews();
+
+            #region Validations
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).
+                AddFluentValidation(fv =>
+                    fv.RegisterValidatorsFromAssemblyContaining<LoginValidator>());
+
+            services.AddTransient<IValidator<LoginDto>, LoginValidator>();
+
+            #endregion
 
             #region Services
             // to add your service
