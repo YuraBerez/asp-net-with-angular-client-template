@@ -27,6 +27,8 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.24" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.33.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +48,7 @@
     <None Remove="Services\" />
     <None Remove="Services\Implementation\" />
     <None Remove="Services\Interface\" />
+    <None Remove="Models\Response\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +64,7 @@
     <Folder Include="Services\" />
     <Folder Include="Services\Implementation\" />
     <Folder Include="Services\Interface\" />
+    <Folder Include="Models\Response\" />
   </ItemGroup>
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

@@ -42,12 +42,12 @@ namespace asp_net_with_angular_client_template.Repository.Interfaces
 
         async Task<User?> IUserRepository.GetByEmailAsync(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(p => p.Email == email);
+            return await _context.Users.Include(p => p.RefreshTokens).SingleOrDefaultAsync(p => p.Email == email);
         }
 
         async Task<User?> IBaseRepository<User>.GetById(Guid id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.Include(p => p.RefreshTokens).SingleOrDefaultAsync(p => p.Id == id);
         }
 
         async Task IBaseRepository<User>.SaveAsync()
