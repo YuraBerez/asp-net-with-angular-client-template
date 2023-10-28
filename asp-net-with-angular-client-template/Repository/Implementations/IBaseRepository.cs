@@ -8,9 +8,9 @@ namespace asp_net_with_angular_client_template.Repository.Implementations
 	public interface IBaseRepository<T>
 	{
         Task<T> AddAsync(T data);
-        Task<T> UpdateAsync(T data);
+        T Update(T data);
         Task<bool> DeleteAsync(Guid id);
-        Task<T> GetById(Guid id);
+        Task<T?> GetById(Guid id);
         Task<List<T>> GetAll();
         Task SaveAsync();
     }
