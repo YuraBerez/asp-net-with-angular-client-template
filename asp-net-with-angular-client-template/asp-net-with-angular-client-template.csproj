@@ -25,6 +25,10 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.24" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.33.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,29 +36,35 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-    <None Remove="Infrastructure\" />
     <None Remove="Repository\" />
-    <None Remove="Infrastructure\Interface\" />
-    <None Remove="Infrastructure\Implementation\" />
     <None Remove="DataContext\" />
     <None Remove="Repository\Implementations\" />
     <None Remove="Repository\Interfaces\" />
     <None Remove="Models\" />
     <None Remove="Models\Dto\" />
     <None Remove="Models\Entity\" />
+    <None Remove="Validators\" />
+    <None Remove="Helpers\" />
+    <None Remove="Services\" />
+    <None Remove="Services\Implementation\" />
+    <None Remove="Services\Interface\" />
+    <None Remove="Models\Response\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
     <Folder Include="Repository\" />
-    <Folder Include="Infrastructure\Interface\" />
-    <Folder Include="Infrastructure\Implementation\" />
     <Folder Include="DataContext\" />
     <Folder Include="Repository\Implementations\" />
     <Folder Include="Repository\Interfaces\" />
     <Folder Include="Models\" />
     <Folder Include="Models\Dto\" />
     <Folder Include="Models\Entity\" />
+    <Folder Include="Validators\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Implementation\" />
+    <Folder Include="Services\Interface\" />
+    <Folder Include="Models\Response\" />
   </ItemGroup>
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

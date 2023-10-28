@@ -3,6 +3,21 @@ using asp_net_with_angular_client_template.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using FluentValidation;
+using FluentValidation.Validators;
+using Microsoft.AspNetCore.Identity;
+using System.Configuration;
+using FluentValidation.AspNetCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using asp_net_with_angular_client_template.Validators;
+using asp_net_with_angular_client_template.Models.Dto;
+using asp_net_with_angular_client_template.Services.Interface;
+using asp_net_with_angular_client_template.Services.Implementation;
+using asp_net_with_angular_client_template.Repository.Implementations;
+using asp_net_with_angular_client_template.Repository.Interfaces;
+using asp_net_with_angular_client_template.Helpers;
+using System.Text;
 
 namespace asp_net_with_angular_client_template
 {
@@ -15,6 +30,7 @@ namespace asp_net_with_angular_client_template
 
         public IConfiguration Configuration { get; }
 
+        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             // connection to MySql DB
@@ -24,17 +40,29 @@ namespace asp_net_with_angular_client_template
             });
 
             SwaggerConfigure(services);
+            JWTConfigure(services);
             LogConfiguration(services);
 
             services.AddCors();
             services.AddControllersWithViews();
 
+            #region Validations
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).
+                AddFluentValidation(fv =>
+                    fv.RegisterValidatorsFromAssemblyContaining<LoginValidator>());
+
+            services.AddTransient<IValidator<LoginDto>, LoginValidator>();
+
+            #endregion
+
             #region Services
-            // to add your service
+            services.AddTransient<IHashService, HashService>();
+            services.AddTransient<IIdentityService, IdentityService>();
             #endregion
 
             #region Repositories
-            // to add your repository
+            services.AddTransient<IUserRepository, UserRepository>();
             #endregion
         }
 
@@ -124,6 +152,44 @@ namespace asp_net_with_angular_client_template
                     }
                 });
             });
+        }
+
+        private static void JWTConfigure(IServiceCollection services)
+        {
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthOptions.KEY));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+                    AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = AuthOptions.ISSUER,
+
+                            ValidateAudience = true,
+                            ValidAudience = AuthOptions.AUDIENCE,
+                            ValidateLifetime = true,
+
+                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            ValidateIssuerSigningKey = true,
+                        };
+
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnMessageReceived = context =>
+                            {
+                                var accessToken = context.Request.Query["access_token"];
+
+                                var path = context.HttpContext.Request.Path;
+                                if (!string.IsNullOrEmpty(accessToken))
+                                {
+                                    context.Token = accessToken;
+                                }
+                                return Task.CompletedTask;
+                            }
+                        };
+                    }).AddCookie();
         }
 
         #endregion
